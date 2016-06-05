@@ -19,7 +19,7 @@ def stop():
     GPIO.output(Motor2B,GPIO.LOW)
     GPIO.output(Motor2E,GPIO.LOW)
 
-def forward(duration):
+def forward(duration=0):
     # Move motors
     GPIO.output(Motor1E,GPIO.HIGH)
     GPIO.output(Motor1A,GPIO.HIGH)
@@ -29,13 +29,16 @@ def forward(duration):
     GPIO.output(Motor2A,GPIO.HIGH)
     GPIO.output(Motor2B,GPIO.LOW)
  
-    # Wait the specified amount of time
-    sleep(duration)
+    # Only stop if the user has specified a duration
+    if duration > 0:
+        # Wait the specified amount of time
+        sleep(duration)
 
-    # Stop movement
-    stop()
+        # Stop movement
+        stop()
  
-def backward(duration):
+ 
+def backward(duration=0):
     # Move motors
     GPIO.output(Motor1E,GPIO.HIGH)
     GPIO.output(Motor1A,GPIO.LOW)
@@ -44,14 +47,16 @@ def backward(duration):
     GPIO.output(Motor2E,GPIO.HIGH)
     GPIO.output(Motor2A,GPIO.LOW)
     GPIO.output(Motor2B,GPIO.HIGH)
- 
-    # Wait the specified amount of time
-    sleep(duration)
 
-    # Stop movement
-    stop()
+    # Only stop if the user has specifed a duration
+    if duration > 0:
+        # Wait the specified amount of time
+        sleep(duration)
+
+        # Stop movement
+        stop()
  
-def left(duration):
+def left(duration=0):
     # Move motors
     GPIO.output(Motor1E,GPIO.HIGH)
     GPIO.output(Motor1A,GPIO.HIGH)
@@ -61,13 +66,14 @@ def left(duration):
     GPIO.output(Motor2A,GPIO.LOW)
     GPIO.output(Motor2B,GPIO.HIGH)
  
-    # Wait the specified amount of time
-    sleep(duration)
+    if duration > 0:
+        # Wait the specified amount of time
+        sleep(duration)
 
-    # Stop movement
-    stop()
+        # Stop movement
+        stop()
 
-def right(duration):
+def right(duration=0):
     # Move motors
     GPIO.output(Motor1E,GPIO.HIGH)
     GPIO.output(Motor1A,GPIO.LOW)
@@ -77,35 +83,40 @@ def right(duration):
     GPIO.output(Motor2A,GPIO.HIGH)
     GPIO.output(Motor2B,GPIO.LOW)
  
-    # Wait the specified amount of time
-    sleep(duration)
+    if duration > 0:
+        # Wait the specified amount of time
+        sleep(duration)
 
-    # Stop movement
-    stop()
- 
-GPIO.setmode(GPIO.BOARD)
- 
-GPIO.setup(Motor1A,GPIO.OUT)
-GPIO.setup(Motor1B,GPIO.OUT)
-GPIO.setup(Motor1E,GPIO.OUT)
- 
-GPIO.setup(Motor2A,GPIO.OUT)
-GPIO.setup(Motor2B,GPIO.OUT)
-GPIO.setup(Motor2E,GPIO.OUT)
- 
-print "Going forwards"
-forward(2)
- 
-print "Going backwards"
-backward(2)
+        # Stop movement
+        stop()
 
-print "Left"
-left(2)
+def setup():
+    GPIO.setup(Motor1A,GPIO.OUT)
+    GPIO.setup(Motor1B,GPIO.OUT)
+    GPIO.setup(Motor1E,GPIO.OUT)
+     
+    GPIO.setup(Motor2A,GPIO.OUT)
+    GPIO.setup(Motor2B,GPIO.OUT)
+    GPIO.setup(Motor2E,GPIO.OUT)   
 
-print "Right"
-right(2)
- 
-print "Now stop"
-stop() 
- 
-GPIO.cleanup()
+if __name__ == "__main__": 
+    GPIO.setmode(GPIO.BOARD)
+     
+    setup()
+     
+    print "Going forwards"
+    forward(2)
+     
+    print "Going backwards"
+    backward(2)
+
+    print "Left"
+    left(2)
+
+    print "Right"
+    right(2)
+     
+    print "Now stop"
+    stop() 
+     
+    GPIO.cleanup()
