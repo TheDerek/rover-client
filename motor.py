@@ -104,19 +104,10 @@ if __name__ == "__main__":
      
     setup()
      
-    print "Going forwards"
     forward(2)
-     
-    print "Going backwards"
     backward(2)
-
-    print "Left"
     left(2)
-
-    print "Right"
     right(2)
-     
-    print "Now stop"
     stop() 
      
     GPIO.cleanup()

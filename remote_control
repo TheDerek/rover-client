@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo ~/.virtualenvs/rover/bin/python remote_control.py 

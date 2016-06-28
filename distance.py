@@ -3,8 +3,8 @@
 import RPi.GPIO as GPIO
 import time
 
-TRIG = 31
-ECHO = 32
+TRIG = 38
+ECHO = 36
 
 def pulse(port):
     GPIO.output(port, GPIO.HIGH)
