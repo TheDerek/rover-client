@@ -1,0 +1,89 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Rover Centre</title>
+    </head>
+
+    <body>
+        Welcome to the rover centre! 
+        <br>
+        Instructions:
+        <ul>
+            <li>Tilt forwards to go forward.</li>
+            <li>Tilt backwards to go backward.</li>
+            <li>Tilt left to go left.</li>
+            <li>Tile right to go right.</li>
+            <li>Hold your phone in the starting position to stop the
+                rover
+            </li>
+            <li>Place your phone in a comfortable position and hit the button below to
+                start controlling the rover. Hit "stop controlling" to stop controling
+                the rover.
+            </li>
+        </ul>
+        <button id="start">Start Controling</button> 
+        <button id="stop" disabled>Stop Controling</button> 
+        <ul>
+            <li>Gamma: <span id="gamma"></span></li>
+            <li>Beta : <span id="beta"></span></li>
+        </ul>
+
+        <script>
+            var startButton = document.getElementById("start");
+            var stopButton = document.getElementById("stop");
+            var gammaDisplay = document.getElementById("gamma");
+            var betaDispaly = document.getElementById("beta");
+
+            window.addEventListener("deviceorientation", handleOrientation, true);
+            startButton.onclick = startRover;
+            stopButton.onclick = stopRover;
+            var ws = null;
+            var running = false;
+            var stopPosition = null;
+            var state = 'stop';
+            var gammaThreshold = 30;
+            var betaThreshold = 30;
+
+            function startRover() {
+                console.log('Starting rover connection');
+                ws = new WebSocket("ws://rover:5678");
+                startButton.disabled = true;
+                stopButton.disabled = false;
+                running = true;
+                startPosition = null;
+            }
+
+            function stopRover() {
+                console.log('Stopping rover connection');
+                ws.send('stop');
+                ws.close();
+                ws = null;
+                running = false;
+                stopButton.disabled = true;
+                startButton.disabled = false;
+            }
+
+            function handleOrientation(event) {
+                if(running) {
+                    var absolute = event.absolute;
+                    var alpha    = event.alpha;
+                    var beta     = event.beta; // (-) left / (+) right
+                    var gamma    = event.gamma; // (+) forward / (-) backward
+
+                    gammaDisplay.value = gamma;
+                    betaDisplay.value = beta;
+
+                    if(startPosition == null)
+                        startPosition = { gamma: gamma, beta: beta };
+
+                    if(gamma - startPosition.gamma > gammaThreshold)
+                        if(state != 'forward')
+                            ws.send('forward')
+                }
+            }
+        </script>
+    </body>
+</html>

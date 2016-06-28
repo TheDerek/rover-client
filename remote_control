@@ -1,3 +1,13 @@
 #!/bin/bash
 
+# Choose the correct python
+# workon rover
+
+# Host the website for the rover
+echo "Hosting http server"
+cd public
+python -m http.server
+
+# Turn on the websocket listener
+echo "Listening for connections"
 sudo ~/.virtualenvs/rover/bin/python remote_control.py 
