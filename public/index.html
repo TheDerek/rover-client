@@ -8,7 +8,7 @@
     </head>
 
     <body>
-        Welcome to the rover centre! 
+        Welcome to the rover centre!
         <br>
         Instructions:
         <ul>
@@ -24,8 +24,8 @@
                 the rover.
             </li>
         </ul>
-        <button id="start">Start Controling</button> 
-        <button id="stop" disabled>Stop Controling</button> 
+        <button id="start">Start Controling</button>
+        <button id="stop" disabled>Stop Controling</button>
         <ul>
             <li>Gamma: <span id="gamma"></span></li>
             <li>Beta : <span id="beta"></span></li>
@@ -35,7 +35,7 @@
             var startButton = document.getElementById("start");
             var stopButton = document.getElementById("stop");
             var gammaDisplay = document.getElementById("gamma");
-            var betaDispaly = document.getElementById("beta");
+            var betaDisplay = document.getElementById("beta");
 
             window.addEventListener("deviceorientation", handleOrientation, true);
             startButton.onclick = startRover;
@@ -73,17 +73,34 @@
                     var beta     = event.beta; // (-) left / (+) right
                     var gamma    = event.gamma; // (+) forward / (-) backward
 
-                    gammaDisplay.value = gamma;
-                    betaDisplay.value = beta;
+                    gammaDisplay.textContent = gamma;
+                    betaDisplay.textContent = beta;
 
                     if(startPosition == null)
                         startPosition = { gamma: gamma, beta: beta };
 
                     if(gamma - startPosition.gamma > gammaThreshold)
-                        if(state != 'forward')
-                            ws.send('forward')
+                        if(gamma < 20)
+                            moveRover('forward');
+                        else
+                            moveRover('backward');
+                    else if(beta - startPosition.beta > betaThreshold)
+                        moveRover('left');
+                    else if(beta - startPosition.beta < -betaThreshold)
+                        moveRover('right');
+                    else
+                        moveRover('stop');
                 }
             }
+
+         function moveRover(newState) {
+             if(state != newState) {
+                 console.log('New State: ' + newState);
+                 state = newState;
+                 ws.send(newState);
+             }
+
+         }
         </script>
     </body>
 </html>
